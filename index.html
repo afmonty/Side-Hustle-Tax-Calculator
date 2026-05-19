@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Free side hustle tax calculator for freelancers, gig workers, creators, and online sellers. Estimate quarterly taxes, profit, and true hourly rate.">
+  <title>Free Side Hustle Tax Calculator</title>
+  <style>
+    :root {
+      --ink: #0c1424;
+      --muted: #617086;
+      --line: #dfe6ee;
+      --soft: #f5f8fb;
+      --paper: #ffffff;
+      --green: #079b68;
+      --green-dark: #05734f;
+      --mint: #d8f8ea;
+      --yellow: #f7c948;
+      --rose: #b94444;
+      --shadow: 0 18px 45px rgba(19, 35, 58, .1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #f2fbf8 0%, #ffffff 520px, #f7f9fb 100%);
+      line-height: 1.5;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 15px;
+      font-weight: 850;
+      cursor: pointer;
+      background: var(--green);
+      color: white;
+    }
+
+    button.secondary {
+      background: #eef2f6;
+      color: #203044;
+    }
+
+    button.ghost {
+      background: white;
+      color: var(--green-dark);
+      border: 1px solid #bfead9;
+    }
+
+    button.dashed {
+      width: 100%;
+      background: white;
+      color: var(--ink);
+      border: 2px dashed #d7dfe8;
+      box-shadow: 0 2px 8px rgba(19, 35, 58, .04);
+    }
+
+    button:focus, input:focus, select:focus {
+      outline: 3px solid rgba(7, 155, 104, .18);
+      outline-offset: 2px;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 18px 0;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: #0d1728;
+      color: var(--yellow);
+      font-weight: 950;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 750;
+      font-size: 14px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 78px 0 56px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--mint);
+      color: #007950;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 850;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 6vw, 70px);
+      line-height: .96;
+      letter-spacing: 0;
+    }
+
+    h1 span { color: var(--green); }
+
+    .hero p {
+      max-width: 720px;
+      margin: 20px auto 0;
+      color: #34465e;
+      font-size: 20px;
+    }
+
+    .trust-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .trust {
+      border: 1px solid #cfe5dc;
+      background: rgba(255,255,255,.75);
+      color: #335244;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) 380px;
+      gap: 22px;
+      align-items: start;
+      padding-bottom: 40px;
+    }
+
+    .panel, .result-panel, .lead-panel, .seo-band {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    .panel h2, .result-panel h2, .lead-panel h2, .seo-band h2 {
+      margin: 0 0 16px;
+      font-size: 18px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #243650;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      font-size: 14px;
+      font-weight: 850;
+      color: #1d2d44;
+    }
+
+    input, select {
+      width: 100%;
+      min-height: 45px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 10px 12px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .segmented button {
+      background: #eef2f6;
+      color: #2f3f55;
+    }
+
+    .segmented button.active {
+      background: var(--green);
+      color: white;
+    }
+
+    .source-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .source-tags button {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: white;
+      color: #34465e;
+      border: 1px solid var(--line);
+      font-size: 12px;
+    }
+
+    .source-tags button.active {
+      background: #e8fbf3;
+      border-color: #98dec5;
+      color: #04724e;
+    }
+
+    .source-card {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+
+    .source-block + .source-block {
+      margin-top: 18px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .result-panel {
+      position: sticky;
+      top: 18px;
+      padding: 22px;
+    }
+
+    .big-number {
+      font-size: 44px;
+      font-weight: 950;
+      line-height: 1;
+      margin: 8px 0 4px;
+      color: var(--green-dark);
+    }
+
+    .metric-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid #edf1f5;
+      padding-bottom: 9px;
+      font-weight: 800;
+    }
+
+    .metric span:first-child {
+      color: var(--muted);
+      font-weight: 750;
+    }
+
+    .callout {
+      margin-top: 16px;
+      padding: 13px;
+      border-radius: 8px;
+      background: #fff8dc;
+      border: 1px solid #f2df8a;
+      color: #5d4a00;
+      font-weight: 750;
+    }
+
+    .lead-panel {
+      padding: 24px;
+      margin: 16px 0 40px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+    }
+
+    .full-calc {
+      width: 100%;
+      min-height: 58px;
+      margin-top: 18px;
+      background: #98d8c3;
+      color: white;
+      font-size: 17px;
+    }
+
+    .lead-panel form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    .seo-band {
+      padding: 30px;
+      margin: 20px 0 54px;
+      box-shadow: none;
+      border-left: 0;
+      border-right: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .seo-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 16px;
+      max-width: 880px;
+    }
+
+    .seo-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: transparent;
+      border-color: transparent;
+    }
+
+    .seo-card h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .footer-link {
+      text-align: center;
+      margin-top: 30px;
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .disclaimer {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 18px;
+    }
+
+    .print-area {
+      display: none;
+    }
+
+    @media (max-width: 960px) {
+      .app-grid, .lead-panel, .lead-panel form, .seo-grid {
+        grid-template-columns: 1fr;
+      }
+      .result-panel {
+        position: static;
+      }
+      .hero {
+        padding-top: 46px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .field-grid, .segmented {
+        grid-template-columns: 1fr;
+      }
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .hero p {
+        font-size: 17px;
+      }
+    }
+
+    @media print {
+      header, .hero, .app-grid, .lead-panel, .seo-band {
+        display: none;
+      }
+      .print-area {
+        display: block;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand"><div class="mark">$</div><span>Hustle Tax Calculator</span></div>
+      <nav class="trust-row" aria-label="Page navigation">
+        <a href="#calculator">Calculator</a>
+        <a href="#results">Results</a>
+        <a href="#guide">How it works</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="pill">$ 100% Free - No Sign-Up Required</div>
+      <h1>How much do you <span>actually</span><br>owe in taxes?</h1>
+      <p>Side hustlers, freelancers, creators, and gig workers can estimate quarterly taxes, real profit, and true hourly rate in under 60 seconds.</p>
+      <div class="trust-row">
+        <div class="trust">Built for 1099 income</div>
+        <div class="trust">2026 federal estimate</div>
+        <div class="trust">Quarterly set-aside plan</div>
+      </div>
+    </section>
+
+    <section class="wrap app-grid" id="calculator">
+      <div>
+        <section class="panel">
+          <h2>Filing Status</h2>
+          <div class="segmented" role="group" aria-label="Filing status">
+            <button id="singleBtn" class="active" type="button">Single</button>
+            <button id="marriedBtn" type="button">Married Filing Jointly</button>
+          </div>
+        </section>
+
+        <section class="panel" id="sourcesPanel">
+          <h2>Income Sources</h2>
+          <div id="sources"></div>
+          <button type="button" class="dashed" id="addSourceBtn">+ Add another income source</button>
+        </section>
+
+        <section class="panel">
+          <h2>Hours Worked Per Week <span class="small" style="text-transform:none;font-weight:500;letter-spacing:0">(optional - for hourly rate calculation)</span></h2>
+          <div class="field-grid">
+            <label>Hours per week
+              <input id="hours" type="number" min="0" step="1" placeholder="e.g. 20" value="">
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Fine Tune</h2>
+          <div class="field-grid">
+            <label>Other W-2 / Household Income<input id="otherIncome" type="number" min="0" step="500" value="0"></label>
+            <label>State / Local Tax Set-Aside %<input id="stateRate" type="number" min="0" max="20" step=".5" value="5"></label>
+            <label>Federal Tax Year<select id="taxYear"><option value="2026">2026 estimate</option></select></label>
+            <label>Safety Cushion %<input id="cushion" type="number" min="0" max="50" step="1" value="10"></label>
+          </div>
+          <button type="button" class="full-calc" id="calcBtn">$ Calculate My Taxes</button>
+          <p class="disclaimer" style="text-align:center">This is an estimate for federal taxes only. State taxes vary. Consult a tax professional for personalized advice. Built by Sa Roan.</p>
+        </section>
+      </div>
+
+      <aside class="result-panel" id="results">
+        <h2>Your Estimate</h2>
+        <div class="small">Recommended quarterly set-aside</div>
+        <div class="big-number" id="quarterly">$0</div>
+        <div class="small" id="sourceSummary">Enter income to see your estimate.</div>
+        <div class="metric-list">
+          <div class="metric"><span>Annual net profit</span><strong id="netProfit">$0</strong></div>
+          <div class="metric"><span>Self-employment tax</span><strong id="seTax">$0</strong></div>
+          <div class="metric"><span>Federal income tax</span><strong id="incomeTax">$0</strong></div>
+          <div class="metric"><span>State/local set-aside</span><strong id="stateTax">$0</strong></div>
+          <div class="metric"><span>Total annual set-aside</span><strong id="annualTax">$0</strong></div>
+          <div class="metric"><span>True hourly rate</span><strong id="hourly">$0/hr</strong></div>
+        </div>
+        <div class="callout" id="callout">Add your income and expenses to get a tax set-aside target.</div>
+        <div class="trust-row">
+          <button type="button" id="printBtn">Print Summary</button>
+          <button type="button" class="secondary" id="copyBtn">Copy Results</button>
+        </div>
+        <p class="disclaimer">Estimate only. This is not tax, legal, or accounting advice. State rules, credits, withholding, retirement contributions, and personal deductions can change your result.</p>
+      </aside>
+    </section>
+
+    <section class="wrap lead-panel">
+      <div>
+        <h2>Get the quarterly tax checklist</h2>
+        <p class="small">Turn this estimate into a simple monthly money routine: what to save, when to pay, and what records to keep.</p>
+      </div>
+      <form id="leadForm">
+        <input id="email" type="email" placeholder="you@example.com" aria-label="Email address" required>
+        <button>Send Me the Checklist</button>
+      </form>
+      <p class="small" id="leadMsg" style="grid-column:1 / -1"></p>
+    </section>
+
+    <section class="wrap seo-band" id="guide">
+      <h2>Built for messy side-hustle money</h2>
+      <div class="seo-grid">
+        <article class="seo-card">
+          <h3>Why do side hustlers need to pay quarterly taxes?</h3>
+          <p class="small">If you earn more than $400 in self-employment income per year, the IRS generally expects estimated tax payments quarterly, not just at tax time. This can include both self-employment tax and federal income tax. Missing payments can result in penalties and a surprise bill in April.</p>
+        </article>
+        <article class="seo-card">
+          <h3>How is self-employment tax calculated?</h3>
+          <p class="small">Self-employment tax is 15.3% before high-income adjustments: 12.4% Social Security plus 2.9% Medicare. It is generally applied to 92.35% of your net self-employment income. This calculator handles that estimate automatically.</p>
+        </article>
+        <article class="seo-card">
+          <h3>What counts as a business expense?</h3>
+          <p class="small">Common deductible expenses may include supplies, equipment, software subscriptions, phone or internet used for business, vehicle mileage, home office space, advertising, professional services, and education related to your business. Keep records for everything you deduct.</p>
+        </article>
+      </div>
+      <div class="footer-link">Explore more business tools -></div>
+      <p class="disclaimer">Sources: IRS 2026 inflation adjustment announcement for standard deduction and federal brackets; IRS Topic No. 554 for self-employment tax rules.</p>
+    </section>
+
+    <section class="print-area">
+      <h1>Side Hustle Tax Estimate</h1>
+      <div id="printSummary"></div>
+    </section>
+  </main>
+
+  <script>
+    const sourceOptions = ["Uber / Lyft", "DoorDash", "Etsy", "Upwork", "Fiverr", "Amazon FBA", "Shopify", "Freelance", "Gumroad", "Other"];
+    const state = {
+      filing: "single",
+      source: "",
+      sources: [{ id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()), source: "", income: 0, expenses: 0, fee: 0 }],
+      lastResult: null
+    };
+
+    const tax2026 = {
+      standardDeduction: { single: 16100, married: 32200 },
+      brackets: {
+        single: [
+          [12400, .10], [50400, .12], [105700, .22], [201775, .24], [256225, .32], [640600, .35], [Infinity, .37]
+        ],
+        married: [
+          [24800, .10], [100800, .12], [211400, .22], [403550, .24], [512450, .32], [768700, .35], [Infinity, .37]
+        ]
+      },
+      additionalMedicareThreshold: { single: 200000, married: 250000 },
+      socialSecurityWageBase: 184500
+    };
+
+    const ids = ["hours", "otherIncome", "stateRate", "cushion"];
+    const money = value => Number(value || 0).toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+    function init() {
+      renderSources();
+      document.getElementById("singleBtn").addEventListener("click", () => setFiling("single"));
+      document.getElementById("marriedBtn").addEventListener("click", () => setFiling("married"));
+      ids.forEach(id => document.getElementById(id).addEventListener("input", calculate));
+      document.getElementById("addSourceBtn").addEventListener("click", addSource);
+      document.getElementById("calcBtn").addEventListener("click", calculate);
+      document.getElementById("printBtn").addEventListener("click", () => window.print());
+      document.getElementById("copyBtn").addEventListener("click", copyResults);
+      document.getElementById("leadForm").addEventListener("submit", captureLead);
+      calculate();
+    }
+
+    function setFiling(filing) {
+      state.filing = filing;
+      document.getElementById("singleBtn").classList.toggle("active", filing === "single");
+      document.getElementById("marriedBtn").classList.toggle("active", filing === "married");
+      calculate();
+    }
+
+    function val(id) {
+      return Number(document.getElementById(id).value || 0);
+    }
+
+    function renderSources() {
+      document.getElementById("sources").innerHTML = state.sources.map((source, index) => `
+        <div class="source-block" data-source-id="${source.id}">
+          <h2>Source ${index + 1}</h2>
+          <div class="source-tags">
+            ${sourceOptions.map(name => `<button type="button" data-source-pick="${source.id}:${name}" class="${source.source === name ? "active" : ""}">${name}</button>`).join("")}
+          </div>
+          <label>Or type your own<input data-source-field="${source.id}:source" value="${source.source === "Other" ? "" : source.source}" placeholder="Example: Gumroad, DoorDash, client work"></label>
+          <div class="source-card">
+            <div class="field-grid">
+              <label>Monthly Income<input data-source-field="${source.id}:income" type="number" min="0" step="50" value="${source.income}"></label>
+              <label>Monthly Expenses<input data-source-field="${source.id}:expenses" type="number" min="0" step="25" value="${source.expenses}"></label>
+              <label>Platform Fee %<input data-source-field="${source.id}:fee" type="number" min="0" max="60" step=".1" value="${source.fee}"></label>
+              <label>${state.sources.length > 1 ? "&nbsp;" : ""}${state.sources.length > 1 ? `<button type="button" class="secondary" data-remove-source="${source.id}">Remove Source</button>` : ""}</label>
+            </div>
+          </div>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-source-pick]").forEach(btn => btn.addEventListener("click", () => {
+        const [id, name] = btn.dataset.sourcePick.split(":");
+        const source = state.sources.find(item => item.id === id);
+        source.source = name;
+        renderSources();
+        calculate();
+      }));
+      document.querySelectorAll("[data-source-field]").forEach(input => input.addEventListener("input", () => {
+        const [id, field] = input.dataset.sourceField.split(":");
+        const source = state.sources.find(item => item.id === id);
+        source[field] = field === "source" ? input.value : Number(input.value || 0);
+        calculate();
+      }));
+      document.querySelectorAll("[data-remove-source]").forEach(btn => btn.addEventListener("click", () => {
+        state.sources = state.sources.filter(source => source.id !== btn.dataset.removeSource);
+        renderSources();
+        calculate();
+      }));
+    }
+
+    function addSource() {
+      state.sources.push({ id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()), source: "", income: 0, expenses: 0, fee: 0 });
+      renderSources();
+      calculate();
+    }
+
+    function calculate() {
+      const monthlyIncome = state.sources.reduce((sum, source) => sum + Number(source.income || 0), 0);
+      const monthlyExpenses = state.sources.reduce((sum, source) => sum + Number(source.expenses || 0), 0);
+      const platformFee = state.sources.reduce((sum, source) => sum + (Number(source.income || 0) * (Number(source.fee || 0) / 100)), 0);
+      const monthlyNet = Math.max(0, monthlyIncome - monthlyExpenses - platformFee);
+      const annualNet = monthlyNet * 12;
+      const seTaxable = annualNet * .9235;
+      const ssTaxable = Math.min(seTaxable, tax2026.socialSecurityWageBase);
+      const medicareTax = seTaxable * .029;
+      const socialSecurityTax = ssTaxable * .124;
+      const additionalMedicare = Math.max(0, seTaxable - tax2026.additionalMedicareThreshold[state.filing]) * .009;
+      const seTax = annualNet >= 400 ? socialSecurityTax + medicareTax + additionalMedicare : 0;
+      const seDeduction = seTax / 2;
+      const taxableIncome = Math.max(0, val("otherIncome") + annualNet - seDeduction - tax2026.standardDeduction[state.filing]);
+      const incomeTax = bracketTax(taxableIncome, tax2026.brackets[state.filing]);
+      const stateTax = annualNet * (val("stateRate") / 100);
+      const cushion = (seTax + incomeTax + stateTax) * (val("cushion") / 100);
+      const annualTax = seTax + incomeTax + stateTax + cushion;
+      const quarterly = annualTax / 4;
+      const annualHours = val("hours") * 52;
+      const afterTaxProfit = Math.max(0, annualNet - annualTax);
+      const hourly = annualHours ? afterTaxProfit / annualHours : 0;
+
+      const result = { monthlyIncome, monthlyExpenses, platformFee, annualNet, seTax, incomeTax, stateTax, annualTax, quarterly, hourly, afterTaxProfit };
+      state.lastResult = result;
+      renderResult(result);
+    }
+
+    function bracketTax(taxable, brackets) {
+      let tax = 0;
+      let previous = 0;
+      for (const [limit, rate] of brackets) {
+        if (taxable <= previous) break;
+        const amount = Math.min(taxable, limit) - previous;
+        tax += amount * rate;
+        previous = limit;
+      }
+      return tax;
+    }
+
+    function renderResult(r) {
+      document.getElementById("quarterly").textContent = money(r.quarterly);
+      document.getElementById("netProfit").textContent = money(r.annualNet);
+      document.getElementById("seTax").textContent = money(r.seTax);
+      document.getElementById("incomeTax").textContent = money(r.incomeTax);
+      document.getElementById("stateTax").textContent = money(r.stateTax);
+      document.getElementById("annualTax").textContent = money(r.annualTax);
+      document.getElementById("hourly").textContent = `${money(r.hourly)}/hr`;
+      const source = state.sources.map(item => item.source).filter(Boolean).join(", ") || "your side hustle";
+      document.getElementById("sourceSummary").textContent = r.annualNet ? `Based on ${source} bringing in about ${money(r.monthlyIncome)} per month.` : "Enter income to see your estimate.";
+      document.getElementById("callout").textContent = r.quarterly
+        ? `Set aside about ${money(r.quarterly)} each quarter, or ${money(r.annualTax / 12)} per month, before paying yourself fully.`
+        : "Add your income and expenses to get a tax set-aside target.";
+      document.getElementById("printSummary").innerHTML = `
+        <p>Quarterly set-aside: <strong>${money(r.quarterly)}</strong></p>
+        <p>Annual net profit: ${money(r.annualNet)}</p>
+        <p>Self-employment tax: ${money(r.seTax)}</p>
+        <p>Federal income tax: ${money(r.incomeTax)}</p>
+        <p>State/local set-aside: ${money(r.stateTax)}</p>
+        <p>Total annual set-aside: ${money(r.annualTax)}</p>
+        <p>True hourly rate: ${money(r.hourly)}/hr</p>
+        <p>Estimate only. Not tax advice.</p>
+      `;
+    }
+
+    async function copyResults() {
+      if (!state.lastResult) return;
+      const r = state.lastResult;
+      const text = `Side Hustle Tax Estimate\nQuarterly set-aside: ${money(r.quarterly)}\nAnnual net profit: ${money(r.annualNet)}\nSelf-employment tax: ${money(r.seTax)}\nFederal income tax: ${money(r.incomeTax)}\nState/local set-aside: ${money(r.stateTax)}\nTrue hourly rate: ${money(r.hourly)}/hr\nEstimate only.`;
+      await navigator.clipboard.writeText(text).catch(() => {});
+      document.getElementById("copyBtn").textContent = "Copied";
+      setTimeout(() => document.getElementById("copyBtn").textContent = "Copy Results", 1200);
+    }
+
+    function captureLead(event) {
+      event.preventDefault();
+      const email = document.getElementById("email").value;
+      const leads = JSON.parse(localStorage.getItem("hustleTaxLeads") || "[]");
+      leads.push({ email, result: state.lastResult, createdAt: new Date().toISOString() });
+      localStorage.setItem("hustleTaxLeads", JSON.stringify(leads));
+      document.getElementById("leadMsg").textContent = "Saved. When this is public, this form can connect to your email platform.";
+      event.target.reset();
+    }
+
+    init();
+  </script>
+</body>
+</html>
